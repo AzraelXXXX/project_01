@@ -1,0 +1,5 @@
+#忽略bootstrap-3.4.1-dist目录下所有的文件
+bootstrap-3.4.1-dist/
+
+#忽略img目录下所有的文件
+img/
