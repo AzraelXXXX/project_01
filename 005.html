@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        // var str = 'hello'
+        // var pattern = /o/
+        // console.log(pattern.exec(str));
+
+
+        // 正则表达式中()包起来的内容表示一个分组，可以通过分组来提取自己想要的内容
+        var str1 = '<div>我是{{name}}</div>'
+        var pattern1 = /{{([a-zA-Z]+)}}/
+        console.log(pattern1.exec(str1));
+
+
+        // 字符串replace
+        var str2 = '<div>我是{{name}}</div>'
+        var pattern2 = /{{([a-zA-Z]+)}}/
+        var result = pattern2.exec(str2)
+        str2 = str2.replace(result[0], result[1])
+        console.log(str2);
+
+
+        var data = {name: '张三', age: 20}
+        var str3 = '<div>{{name}}今年{{age}}岁</div>'
+        var pattern3 = /{{\s*([a-zA-Z]+)\s*}}/
+        // // 第一次匹配
+        // var res1 = pattern3.exec(str3)
+        // str3 = str3.replace(res1[0],res1[1])
+        // console.log(str3);
+
+        // // 第二次匹配
+        // var res2 = pattern3.exec(str3)
+        // str3 = str3.replace(res2[0],res2[1])
+        // console.log(str3);
+
+
+        // while循环replace
+        var patternResult = null
+        while(patternResult = pattern3.exec(str3)) {
+            str3 = str3.replace(patternResult[0], data[patternResult[1]])
+        }
+        console.log(str3);
+    </script>
+</body>
+</html>

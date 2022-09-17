@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" id="form1">
+        <input type="text" name="uname" autocomplete="off">
+        <input type="password" name="upwd">
+        <button type="submit">提交</button>
+    </form>
+
+
+    <script>
+        var xhr = new XMLHttpRequest()
+        // 设置HTTP请求时限
+        // 设置超时时间
+        xhr.timeout = 300
+        // 设置超时以后的处理函数
+        xhr.ontimeout = function() {
+            console.log('请求超时');
+        }
+
+        xhr.open('GET','http://www.liulongbin.top:3006/api/getbooks')
+        xhr.send()
+        xhr.onreadystatechange = function() {
+            if(xhr.readyState === 4 && xhr.status === 200) {
+                console.log(xhr.responseText);
+            }
+        }
+
+
+
+        // FormData对象的基本使用
+        // 1. 创建FormData实例
+        var fd = new FormData()
+        // 2. 调用append函数，向fd中追加数据
+        fd.append('uname','zs')
+        fd.append('upwd','123456')
+
+        var xhr1 = new XMLHttpRequest()
+        xhr1.open('POST','http://www.liulongbin.top:3006/api/formdata')
+        xhr1.send(fd)
+        xhr1.onreadystatechange = function() {
+            if(xhr1.readyState === 4 && xhr1.status === 200) {
+                console.log(JSON.parse(xhr1.responseText));
+            }
+        }
+
+
+
+        // FormData对象管理表单数据
+        // 1. 通过DOM操作，获取到form表单元素
+        var form = document.querySelector('#form1')
+
+        form.addEventListener('submit',function(e) {
+            // 阻止表单的默认提交行为
+            e.preventDefault()
+
+            // 创建FormData，快速获取到form表单中的数据
+            var fd = new FormData(form)
+
+            var xhr2 = new XMLHttpRequest()
+            xhr2.open('POST','http://www.liulongbin.top:3006/api/formdata')
+            xhr2.send(fd)
+            xhr2.onreadystatechange = function() {
+                if(xhr2.readyState === 4 && xhr2.status === 200) {
+                    console.log(JSON.parse(xhr2.responseText));
+                }
+            }
+        })
+    </script>
+</body>
+</html>

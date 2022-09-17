@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/news.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/template-web.js"></script>
+</head>
+
+<body>
+    <div id="news-list"></div>
+
+    <script type="text/html" id="tpl-news">
+        {{each data}}
+        <div class="news-item">
+            <img class="thumb" src="{{'http://www.liulongbin.top:3006' + $value.img}}" alt="" />
+            <div class="right-box">
+                <h1 class="title">{{$value.title}}</h1>
+                <div class="tags">
+                    {{each $value.tags}}
+                    <span>{{$value}}</span>
+                    {{/each}} 
+                </div>
+                <div class="footer">
+                    <div>
+                        <span>{{$value.source}}</span>&nbsp;&nbsp;
+                        <span>{{$value.time | dateFormat}}</span>
+                    </div>
+                    <span>评论数：{{$value.cmtcount}}</span>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </script>
+
+    <script>
+        $(function() {
+            // 给时间补零函数
+            function padZero(n) {
+                return n < 10 ? '0' + n : n
+            }
+
+            // 定义格式化时间的过滤器
+            template.defaults.imports.dateFormat = function(dtStr) {
+                var dt = new Date(dtStr)
+                var y = dt.getFullYear()
+                var m = padZero(dt.getMonth() + 1)
+                var d = padZero(dt.getDate())
+
+                var hh = padZero(dt.getHours())
+                var mm = padZero(dt.getMinutes())
+                var ss = padZero(dt.getSeconds())
+                return y + '-' + m + '-' + d + ' ' + hh + ':' + mm + ':' + ss 
+            }
+
+
+            // 获取新闻列表的函数
+            function getNewsList() {
+                $.get('http://www.liulongbin.top:3006/api/news',function(res) {
+                    console.log(res);
+                    if(res.status !== 200) return alert('获取新闻列表数据失败')
+                    // 把每一项的 tags 属性，从字符串改造成字符串的数组
+                    for(var i = 0; i < res.data.length; i++) {
+                        res.data[i].tags = res.data[i].tags.split(',')
+                    }
+                    var htmlStr = template('tpl-news', res)
+                    $('#news-list').html(htmlStr)
+                })
+            }
+
+            getNewsList()
+        })
+    </script>
+
+</body>
+
+</html>
